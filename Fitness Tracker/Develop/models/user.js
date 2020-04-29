@@ -1,8 +1,22 @@
-module.exports = function(sequelize, DataTypes) {
-    var User = sequelize.define("User", {
-      email: DataTypes.STRING,
-      password: DataTypes.STRING
-    });
-    return User;
-  };
-  
+const mongoose = require("mongoose");
+
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
+  password: {
+    type: String,
+    trim: true,
+    required: "Password is Required",
+    validate: [({ length }) => length >= 6, "Password should be longer."]
+  },
+
+  email: {
+    type: String,
+    unique: true,
+    match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
+  },
+});
+
+const User = mongoose.model("User", UserSchema);
+
+module.exports = User;
